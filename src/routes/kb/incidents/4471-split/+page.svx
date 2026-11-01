@@ -1,0 +1,64 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: support desk
+status: draft
+reviewed: 2026-11-01
+signature: "Sasha D'Costa"
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+
+  const issues = {
+    parser: 'https://github.com/sashacosta/what-it-shows/issues/1',
+    hint: 'https://github.com/sashacosta/what-it-shows/issues/2',
+    'one-day move': 'https://github.com/sashacosta/what-it-shows/issues/3',
+  };
+</script>
+
+[#4471](/kb/incidents/4471) was merged as one issue and marked known. Its own cause table already
+splits it in two, and the desk's notes hold a third problem the table only footnotes. Each one
+now has its own ticket.
+
+<Callout kind="warn">
+Fixing the parser will not close #4471. Two of these problems survive that fix.
+</Callout>
+
+## What #4471 holds
+
+<ProblemTable ticket={4471} {issues} />
+
+## The three problems
+
+**`parser`: the shared date parser reads every date month first.** All our tenants write the
+day first, so any day up to 12 swaps with the month: 7 April goes out as 4 July. Reports come in
+through the app, email and the form, from every tenant.
+
+**`hint`: the booking-v3 form tells people to type the month first.** Its date field says
+`MM/DD/YYYY`, and then reads the date the tenant's way, day first. People do what the hint says
+and get a swapped date. Only form reports from booking-v3 tenants. Fixing the parser does not fix
+this: the form needs the right hint.
+
+**`one-day move`: the date is off by one day, not swapped.** "Invite says Tuesday 12 May,
+calendar says Monday 11 May", "every booking in June is one day off", "client in Lisbon got
+Tuesday, client in Toronto got Monday", "the invite arrived before I made the booking". These read
+like a time-zone or daylight-saving shift, not the parser. The desk noted them
+(`desk-notes.json`) but filed them under `parser` by tenant.
+
+## How they ended up in one ticket
+
+Duplicates are merged on subject line alone ([decision 0001](/kb/decisions/0001-dedupe-by-subject)).
+All three problems produce the same subjects ("Wrong day on the invite", "Date is wrong"), so they
+merged into one ticket. Intake's tag is a guess from the reporter's browser and disagrees with the
+tenant's cause on dozens of reports, so it can't split them either.
+
+## For the desk
+
+- Count a ticket by cause, not by subject. `causes.ts` already knows two of the three.
+- A report that doesn't read as a swapped date is a different problem. Give it a ticket, not a
+  footnote.
+
+<RenderStamp {signature} />

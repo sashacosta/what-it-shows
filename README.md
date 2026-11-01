@@ -34,3 +34,11 @@ Support desk. Decision records: whoever signed them.
 ---
 
 Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
+
+---
+
+## Added on 2026-11-01: the problems inside #4471
+
+- Page: [`src/routes/kb/incidents/4471-split/+page.svx`](src/routes/kb/incidents/4471-split/+page.svx), with its numbers computed by [`src/lib/kb/ProblemTable.svelte`](src/lib/kb/ProblemTable.svelte).
+- As the desk sees it: [`rendered/kb/incidents/4471-split.html`](rendered/kb/incidents/4471-split.html) (built with `npm install && npm run build`, styles inlined).
+- Tickets: [#1 parser](https://github.com/sashacosta/what-it-shows/issues/1) · [#2 booking-v3 hint](https://github.com/sashacosta/what-it-shows/issues/2) · [#3 one-day move](https://github.com/sashacosta/what-it-shows/issues/3)
